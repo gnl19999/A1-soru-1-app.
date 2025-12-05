@@ -26,11 +26,13 @@ QUESTIONS_DATA = {
 
 def run_improved_quiz(data):
     """
-    Verilen veri setine göre çoktan seçmeli sınavı çalıştırır, çıktıyı daha belirgin yapar.
+    Verilen veri setine göre çoktan seçmeli sınavı çalıştırır.
+    Hata düzeltmeleri: Başarı yüzdesi hesaplaması düzeltildi.
     """
     score = 0
     questions = list(data.items())
     random.shuffle(questions)
+    total_questions = len(questions) # Toplam soru sayısını bir değişkende tut
 
     print("=" * 60)
     print("           ** İNGİLİZCE KELİME SINAVI ** ")
@@ -45,11 +47,11 @@ def run_improved_quiz(data):
         option_map = {chr(65 + j): option for j, option in enumerate(options)} 
         
         # Soru başlığı
-        print(f"\n>>>>>>> SORU {i + 1} / {len(questions)} <<<<<<<")
+        print(f"\n>>>>>>> SORU {i + 1} / {total_questions} <<<<<<<")
         print(f"       ** KELİME: {word.upper()} **")
         print("------------------------------------------")
 
-        # Seçenekleri büyük bloklar halinde göster
+        # Seçenekleri göster
         for letter, definition in option_map.items():
             print(f"| {letter}. {definition.ljust(50)} |")
             print("|" + "-" * 58 + "|")
@@ -74,17 +76,22 @@ def run_improved_quiz(data):
         else:
             correct_key = [k for k, v in option_map.items() if v == correct_definition][0]
             print("\n==================================")
-            print(f"   ❌ YANLIŞ. Doğru Cevap {correct_key} idi.   ")
+            print(f"   ❌ YANLIŞ. Doğru Cevap **{correct_key}** idi.   ")
             print(f"   Doğru Tanım: {correct_definition}")
             print("==================================\n")
         
         print("\n" * 2) # İki satır boşluk bırak
 
     # Sonuç
+    if total_questions > 0:
+        success_percentage = round((score / total_questions) * 100, 2)
+    else:
+        success_percentage = 0
+        
     print("\n" + "=" * 60)
     print("            *** SINAV SONUÇLARI *** ")
-    print(f"  Toplam Doğru: {score} / {len(questions)}")
-    print(f"  Başarı Yüzdesi: {round((score / len(questions)) * 100, 2)}%")
+    print(f"  Toplam Doğru: {score} / {total_questions}")
+    print(f"  Başarı Yüzdesi: {success_percentage}%") # Hata burada düzeltildi.
     print("=" * 60)
     
 # Sınavı başlat
