@@ -1,0 +1,108 @@
+import random
+
+# Kelime: [Doğru Tanım, [Yanlış Tanım 1, Yanlış Tanım 2, Yanlış Tanım 3]]
+# NOT: Sorular artık kelimenin kendisi değil, kelimenin tanımı oldu.
+# Kelime listenizden 20 tane için örnek soru setleri:
+QUESTIONS_DATA = {
+    'can': ['Yetenek veya izin ifade eden modal fiil.', 
+            ['Olmalı', 'Gitmeli', 'Yapmalı']],
+    'cannot': ['Yapılamaz, mümkün değil (can not\'ın kısaltılmışı).', 
+               ['Yapabilir', 'Yapmış', 'Yapacak']],
+    'capital': ['Bir ülkenin veya eyaletin yönetim merkezi olan şehir.', 
+                ['Küçük kasaba', 'Sanayi bölgesi', 'Dağlık alan']],
+    'car': ['Motorlu, dört tekerlekli binek taşıtı.', 
+            ['İki tekerlekli bisiklet', 'Büyük kamyon', 'Deniz aracı']],
+    'card': ['Plastik veya kağıttan yapılmış, genellikle kimlik veya banka işlemi için kullanılan dikdörtgen.', 
+             ['Metal para', 'Büyük kitap', 'Uzun boru']],
+    'career': ['Bir bireyin hayatı boyunca yaptığı meslekler dizisi; mesleki ilerleme.', 
+               ['Hobi', 'Gündelik görev', 'Boş zaman aktivitesi']],
+    'carrot': ['Genellikle turuncu renkte, yenilebilir bir kök sebze.', 
+               ['Mavi meyve', 'Kırmızı et', 'Sarı yaprak']],
+    'carry': ['Bir şeyi bir yerden başka bir yere taşımak.', 
+              ['Bırakmak', 'İtmek', 'Ayakta durmak']],
+    'cat': ['Evcil, küçük, kürk hayvanı; miyavlar.', 
+            ['Büyük sürüngen', 'Uçan böcek', 'Suda yaşayan balık']],
+    'CD': ['Müzik veya veri depolayan optik disk.', 
+           ['Eski mektup', 'Büyük resim', 'Metal alet']],
+    'cent': ['Bazı para birimlerinin (örn. dolar) temel biriminin yüzde biri.', 
+             ['Tamamen yeni', 'Çok eski', 'Tam bir bütün']],
+    'centre': ['Bir şeyin tam ortası veya merkezi (İngiliz İngilizcesi).', 
+               ['Kenar, köşe', 'Başlangıç noktası', 'Son nokta']],
+    'century': ['Yüz yıllık bir zaman dilimi.', 
+                ['On yıl', 'Bin yıl', 'Bir ay']],
+    'chair': ['Oturmak için kullanılan, arkalıklı mobilya parçası.', 
+              ['Yatmak için mobilya', 'Ayakta durmak için destek', 'Yemek pişirme aracı']],
+    'change': ['Değiştirmek veya bozuk para.', 
+               ['Aynı kalmak', 'Bozmak', 'Savaşmak']],
+    'chart': ['Verileri veya bilgileri grafiksel olarak gösteren tablo.', 
+              ['Uzun hikaye', 'Kısa şiir', 'Sıkıcı konuşma']],
+    'cheap': ['Düşük maliyetli, pahalı olmayan.', 
+              ['Çok değerli', 'Yüksek fiyatlı', 'Nadiren bulunan']],
+    'check': ['Doğruluğunu kontrol etmek; bir restoranda hesap istemek.', 
+              ['Göz ardı etmek', 'Onaylamak', 'Kırmak']],
+    'cheese': ['Sütten yapılan, genellikle sarı veya beyaz, popüler bir gıda.', 
+               ['Tahıl ürünü', 'Meyve suyu', 'Deniz ürünü']],
+    'chicken': ['Kümes hayvanı; eti yenen ve yumurtası olan kuş.', 
+                ['Büyük baş hayvan', 'Yabani ot', 'Suda yüzen memeli']],
+}
+
+def run_visual_quiz(data):
+    """
+    Verilen veri setine göre çoktan seçmeli sınavı çalıştırır, görseldeki stile benzer metin çıktısı verir.
+    """
+    score = 0
+    questions = list(data.items())
+    random.shuffle(questions) # Soruların sırasını karıştır
+
+    print("=========================================")
+    print("      ✨ KELİME BİLGİSİ SINAVI ✨       ")
+    print(" (Doğru Tanımı Seçmek İçin A, B, C veya D Girin) ")
+    print("=========================================\n")
+
+    for i, (word, (correct_definition, distractors)) in enumerate(questions):
+        # Cevap şıklarını oluştur (Doğru tanım + 3 yanlış tanım)
+        options = [correct_definition] + distractors
+        random.shuffle(options) # Şıkların sırasını karıştır
+
+        # Şıkları harflerle (A, B, C, D) gösteren harita
+        option_map = {chr(65 + j): option for j, option in enumerate(options)} 
+        
+        # Ekran görüntüsündeki stili taklit eden metin çıktısı
+        print(f"--- Soru {i + 1}/{len(questions)} ---\n")
+        print(f"    ⭐ {word.upper()} ⭐\n") 
+        
+        # Seçenekleri alt alta, çerçeveli gibi göster
+        for letter, definition in option_map.items():
+            print(f"  [{letter}] {definition}")
+        
+        print("-" * 20)
+
+        # Kullanıcıdan cevap al
+        while True:
+            user_answer_key = input("Cevabınız (A/B/C/D): ").strip().upper()
+            if user_answer_key in option_map:
+                break
+            print("❗ Geçersiz giriş. Lütfen A, B, C veya D giriniz.")
+
+        # Cevabı kontrol et
+        user_choice = option_map[user_answer_key]
+        
+        if user_choice == correct_definition:
+            print(f"\n✅ DOĞRU! '{word}' = {correct_definition}\n")
+            score += 1
+        else:
+            correct_key = [k for k, v in option_map.items() if v == correct_definition][0]
+            print(f"\n❌ YANLIŞ. Doğru cevap **{correct_key}** idi: {correct_definition}\n")
+        
+        print("="*40 + "\n")
+
+    # Sonucu göster
+    print("-----------------------------------------")
+    print("      🎉 Sınav Tamamlandı! 🎉           ")
+    print(f"  Toplam Skorunuz: {score} / {len(questions)}")
+    print(f"  Başarı Yüzdesi: {round((score / len(questions)) * 100, 2)}%")
+    print("-----------------------------------------")
+    
+# Sınavı başlat
+if __name__ == "__main__":
+    run_visual_quiz(QUESTIONS_DATA)
