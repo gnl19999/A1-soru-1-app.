@@ -1,99 +1,26 @@
-import random
-
-# Kelime: [Doğru Tanım, [Yanlış Tanım 1, Yanlış Tanım 2, Yanlış Tanım 3]]
-QUESTIONS_DATA = {
-    'can': ['Yetenek veya izin ifade eden modal fiil.', ['Olmalı', 'Gitmeli', 'Yapmalı']],
-    'cannot': ['Yapılamaz, mümkün değil (can not\'ın kısaltılmışı).', ['Yapabilir', 'Yapmış', 'Yapacak']],
-    'capital': ['Bir ülkenin veya eyaletin yönetim merkezi olan şehir.', ['Küçük kasaba', 'Sanayi bölgesi', 'Dağlık alan']],
-    'car': ['Motorlu, dört tekerlekli binek taşıtı.', ['İki tekerlekli bisiklet', 'Büyük kamyon', 'Deniz aracı']],
-    'card': ['Plastik veya kağıttan yapılmış, genellikle kimlik veya banka işlemi için kullanılan dikdörtgen.', ['Metal para', 'Büyük kitap', 'Uzun boru']],
-    'career': ['Bir bireyin hayatı boyunca yaptığı meslekler dizisi; mesleki ilerleme.', ['Hobi', 'Gündelik görev', 'Boş zaman aktivitesi']],
-    'carrot': ['Genellikle turuncu renkte, yenilebilir bir kök sebze.', ['Mavi meyve', 'Kırmızı et', 'Sarı yaprak']],
-    'carry': ['Bir şeyi bir yerden başka bir yere taşımak.', ['Bırakmak', 'İtmek', 'Ayakta durmak']],
-    'cat': ['Evcil, küçük, kürk hayvanı; miyavlar.', ['Büyük sürüngen', 'Uçan böcek', 'Suda yaşayan balık']],
-    'CD': ['Müzik veya veri depolayan optik disk.', ['Eski mektup', 'Büyük resim', 'Metal alet']],
-    'cent': ['Bazı para birimlerinin (örn. dolar) temel biriminin yüzde biri.', ['Tamamen yeni', 'Çok eski', 'Tam bir bütün']],
-    'centre': ['Bir şeyin tam ortası veya merkezi (İngiliz İngilizcesi).', ['Kenar, köşe', 'Başlangıç noktası', 'Son nokta']],
-    'century': ['Yüz yıllık bir zaman dilimi.', ['On yıl', 'Bin yıl', 'Bir ay']],
-    'chair': ['Oturmak için kullanılan, arkalıklı mobilya parçası.', ['Yatmak için mobilya', 'Ayakta durmak için destek', 'Yemek pişirme aracı']],
-    'change': ['Değiştirmek veya bozuk para.', ['Aynı kalmak', 'Bozmak', 'Savaşmak']],
-    'chart': ['Verileri veya bilgileri grafiksel olarak gösteren tablo.', ['Uzun hikaye', 'Kısa şiir', 'Sıkıcı konuşma']],
-    'cheap': ['Düşük maliyetli, pahalı olmayan.', ['Çok değerli', 'Yüksek fiyatlı', 'Nadiren bulunan']],
-    'check': ['Doğruluğunu kontrol etmek; bir restoranda hesap istemek.', ['Göz ardı etmek', 'Onaylamak', 'Kırmak']],
-    'cheese': ['Sütten yapılan, genellikle sarı veya beyaz, popüler bir gıda.', ['Tahıl ürünü', 'Meyve suyu', 'Deniz ürünü']],
-    'chicken': ['Kümes hayvanı; eti yenen ve yumurtası olan kuş.', ['Büyük baş hayvan', 'Yabani ot', 'Suda yüzen memeli']],
-}
-
-def run_improved_quiz(data):
-    """
-    Verilen veri setine göre çoktan seçmeli sınavı çalıştırır.
-    Hata düzeltmeleri: Başarı yüzdesi hesaplaması düzeltildi.
-    """
-    score = 0
-    questions = list(data.items())
-    random.shuffle(questions)
-    total_questions = len(questions) # Toplam soru sayısını bir değişkende tut
-
-    print("=" * 60)
-    print("           ** İNGİLİZCE KELİME SINAVI ** ")
-    print("=" * 60)
-    print("  ⭐ Doğru Tanımı Seçmek İçin A, B, C veya D Girin ⭐ ")
-    print("-" * 60)
-
-    for i, (word, (correct_definition, distractors)) in enumerate(questions):
-        
-        options = [correct_definition] + distractors
-        random.shuffle(options)
-        option_map = {chr(65 + j): option for j, option in enumerate(options)} 
-        
-        # Soru başlığı
-        print(f"\n>>>>>>> SORU {i + 1} / {total_questions} <<<<<<<")
-        print(f"       ** KELİME: {word.upper()} **")
-        print("------------------------------------------")
-
-        # Seçenekleri göster
-        for letter, definition in option_map.items():
-            print(f"| {letter}. {definition.ljust(50)} |")
-            print("|" + "-" * 58 + "|")
-        
-        print("\n")
-
-        # Kullanıcıdan cevap al
-        while True:
-            user_answer_key = input("Lütfen Cevabınızı Girin (A/B/C/D): ").strip().upper()
-            if user_answer_key in option_map:
-                break
-            print(">>> ❌ GEÇERSİZ GİRİŞ! Lütfen A, B, C veya D giriniz. <<<")
-
-        # Cevabı kontrol et
-        user_choice = option_map[user_answer_key]
-        
-        if user_choice == correct_definition:
-            print("\n==================================")
-            print("   ✅ DOĞRU CEVAP! Mükemmel.   ")
-            print("==================================\n")
-            score += 1
-        else:
-            correct_key = [k for k, v in option_map.items() if v == correct_definition][0]
-            print("\n==================================")
-            print(f"   ❌ YANLIŞ. Doğru Cevap **{correct_key}** idi.   ")
-            print(f"   Doğru Tanım: {correct_definition}")
-            print("==================================\n")
-        
-        print("\n" * 2) # İki satır boşluk bırak
-
-    # Sonuç
-    if total_questions > 0:
-        success_percentage = round((score / total_questions) * 100, 2)
-    else:
-        success_percentage = 0
-        
-    print("\n" + "=" * 60)
-    print("            *** SINAV SONUÇLARI *** ")
-    print(f"  Toplam Doğru: {score} / {total_questions}")
-    print(f"  Başarı Yüzdesi: {success_percentage}%") # Hata burada düzeltildi.
-    print("=" * 60)
-    
-# Sınavı başlat
-if __name__ == "__main__":
-    run_improved_quiz(QUESTIONS_DATA)
+<div id="wordsSidebar" class="words-sidebar">
+    <span class="close-btn" id="closeSidebarButton">&times;</span>
+    <div class="sidebar-content">
+        <h1>Kelimeler (20 Kelime)</h1>
+        <div class="word-item"><span class="english-word">can</span><span class="word-type">modal verb.</span><span class="turkish-translation">yapabilmek, -ebilmek</span></div>
+        <div class="word-item"><span class="english-word">cannot</span><span class="word-type">modal verb.</span><span class="turkish-translation">yapamamak, -ememek</span></div>
+        <div class="word-item"><span class="english-word">capital</span><span class="word-type">noun.</span><span class="turkish-translation">başkent, büyük harf, sermaye</span></div>
+        <div class="word-item"><span class="english-word">car</span><span class="word-type">noun.</span><span class="turkish-translation">araba, otomobil</span></div>
+        <div class="word-item"><span class="english-word">card</span><span class="word-type">noun.</span><span class="turkish-translation">kart</span></div>
+        <div class="word-item"><span class="english-word">career</span><span class="word-type">noun.</span><span class="turkish-translation">kariyer, meslek</span></div>
+        <div class="word-item"><span class="english-word">carrot</span><span class="word-type">noun.</span><span class="turkish-translation">havuç</span></div>
+        <div class="word-item"><span class="english-word">carry</span><span class="word-type">verb.</span><span class="turkish-translation">taşımak, götürmek</span></div>
+        <div class="word-item"><span class="english-word">cat</span><span class="word-type">noun.</span><span class="turkish-translation">kedi</span></div>
+        <div class="word-item"><span class="english-word">CD</span><span class="word-type">noun.</span><span class="turkish-translation">CD, kompakt disk</span></div>
+        <div class="word-item"><span class="english-word">cent</span><span class="word-type">noun.</span><span class="turkish-translation">sent (para birimi)</span></div>
+        <div class="word-item"><span class="english-word">centre</span><span class="word-type">noun.</span><span class="turkish-translation">merkez, orta</span></div>
+        <div class="word-item"><span class="english-word">century</span><span class="word-type">noun.</span><span class="turkish-translation">yüzyıl, asır</span></div>
+        <div class="word-item"><span class="english-word">chair</span><span class="word-type">noun.</span><span class="turkish-translation">sandalye</span></div>
+        <div class="word-item"><span class="english-word">change</span><span class="word-type">verb/noun.</span><span class="turkish-translation">değiştirmek, değişim</span></div>
+        <div class="word-item"><span class="english-word">chart</span><span class="word-type">noun.</span><span class="turkish-translation">çizelge, grafik</span></div>
+        <div class="word-item"><span class="english-word">cheap</span><span class="word-type">adj.</span><span class="turkish-translation">ucuz</span></div>
+        <div class="word-item"><span class="english-word">check</span><span class="word-type">verb/noun.</span><span class="turkish-translation">kontrol etmek, çek (banka)</span></div>
+        <div class="word-item"><span class="english-word">cheese</span><span class="word-type">noun.</span><span class="turkish-translation">peynir</span></div>
+        <div class="word-item"><span class="english-word">chicken</span><span class="word-type">noun.</span><span class="turkish-translation">tavuk</span></div>
+        </div>
+</div>
